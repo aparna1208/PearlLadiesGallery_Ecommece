@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<section class="section-content padding-y bg">
+<div class="container">
+
+<!-- ============================ COMPONENT 1 ================================= -->
+
+
+<div class="row">
+    <h4 class="text-center mb-10 ">Review Your Order and Make Payment</h4>
+	<aside class="col-lg-8">
+        <div class="card">
+            <h5 class="card-header">Billing Address</h5>
+            <div class="card-body">
+                <p class="card-text mb-0">{{order.full_name}}</p>
+                <p class="card-text mb-0">{{order.full_address}}</p>
+                <p class="card-text mb-0">{{order.city}},{{order.state}}</p>
+                <p class="card-text mb-0">{{order.country}}</p>
+                <p class="card-text mb-0">{{order.email}}</p>
+                <p class="card-text mb-0">{{order.phone}}</p>
+
+                {% if order.order_note %}
+                   <b>Order Note:</b>{{order.order_note}}
+    
+
+                {% endif %}
+
+
+            </div>
+        </div> <!-- card.// -->
+        <div class="card">
+            <h5 class="card-header">Payment Method</h5>
+            <div class="card-body">
+                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+            </div>
+        </div> 
+        <div class="card">
+            <h5 class="card-header"> Review Product</h5>
+            <div class="card-body">
+                <table class="table table-borderless table-shopping-cart">
+                    <thead class="text-muted">
+                    <tr class="small text-uppercase">
+                    <th scope="col">Product</th>
+                    <th scope="col" width="120">Quantity</th>
+                    <th scope="col" width="120">Price</th>
+                    <th scope="col" class="text-right" width="200"> </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+
+                    {% for cart_item in cart_items %}
+                    
+                        
+                    <tr>
+                        <td>
+                            <figure class="itemside align-items-center">
+                                <div class="aside"><img src="{{ cart_item.product.image.url }}" class="img-sm"></div>
+                                <figcaption class="info">
+                                    <a href="{{cart_item.product.get_url}}" class="title text-dark">{{cart_item.product.product_name}}</a>
+                                    <p class="text-muted small">
+                                        {% if cart_item.variations.all %}
+                                            {% for item in cart_item.variations.all %}
+                                                {{ item.variation_category | capfirst }} : {{ item.variation_value | capfirst }} <br>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </p>
+                                </figcaption>
+                            </figure>
+                        </td>
+                        <td> 
+                            <!-- col.// -->
+                                        <div class="col"> 
+                                            <div class="input-group input-spinner">
+                                                <div class="input-group-prepend">
+                                                <a href="{% url 'remove_cart' cart_item.product_id cart_item.id %}" class="btn btn-light" type="button" id="button-plus"> <i class="fa fa-minus"></i> </a>
+                                                </div>
+                                                <input type="text" class="form-control"  value="{{cart_item.quantity}}">
+                                                <div class="input-group-append">
+                                                <form action="{% url 'add_cart' cart_item.product.id %}" method ="POST">
+                                                    {% csrf_token %}
+                                                    {% for item in cart_item.variations.all %}
+                                                        <input type="hidden" name = "{{item.variation_category | lower }}" value = "{{item.variation_value | capfirst }}">							  						
+                                                    {% endfor %}
+                                                    <button class="btn btn-light" type="submit" id="button-minus"><i class="fa fa-plus"></i></button>
+                                                </form>
+                                                </div>
+                                            </div> <!-- input-group.// -->
+                                        </div> <!-- col.// -->
+                        </td>
+                        <td> 
+                            <div class="price-wrap"> 
+                                <var class="price">₹{{cart_item.sub_total}}</var> 
+                                <small class="text-muted"> ₹{{cart_item.product.price}} each </small> 
+                            </div> <!-- price-wrap .// -->
+                        </td>
+                        <td class="text-right"> 
+                        <a href="{% url 'remove_cart_item' cart_item.product_id cart_item.id %}" onclick="return confirm('Are you sure you want to delete the item?')" class="btn btn-danger"> Remove</a>
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div> 
+
+	</aside> <!-- col.// -->
+	<aside class="col-lg-4">
+
+		<div class="card">
+		<div class="card-body">
+			<dl class="dlist-align">
+			  <dt>Total price:</dt>
+			  <dd class="text-right">₹{{total}}</dd>
+			</dl>
+			<dl class="dlist-align">
+			  <dt>Tax:</dt>
+			  <dd class="text-right">₹{{tax}}</dd>
+			</dl>
+			<dl class="dlist-align">
+			  <dt>Total:</dt>
+			  <dd class="text-right text-dark b"><strong>₹{{grand_total}}</strong></dd>
+			</dl>
+			<hr>
+			<p class="text-center mb-3">
+				<img src="{% static './images/misc/payments.png' %}" height="26">
+			</p>
+			
+
+            <button id="rzp-button1" class="btn btn-primary btn-block">Pay Now</button>
+
+		</div> <!-- card-body.// -->
+		</div> <!-- card.// -->
+
+</aside> <!-- col.// -->
+
+
+</div> <!-- row.// -->
+<!-- ============================ COMPONENT 1 END .// ================================= -->
+
+</div> <!-- container .//  -->
+</section>
+
+<!-- Razorpay script -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+    // Get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var csrftoken = getCookie('csrftoken');
+
+    // Razorpay needs amount in paisa
+    var amount = "{{ grand_total }}" * 100;
+    var orderID = "{{ order.order_number }}";
+
+    // Backend URL (same as PayPal view)
+    var payment_url = "{% url 'payments' %}";
+    var razorpay_key = "{{ razorpay_key }}";  // pass from views.py
+
+    document.getElementById('rzp-button1').onclick = function(e){
+        e.preventDefault();
+
+        var options = {
+            "key": razorpay_key,
+            "amount": amount,
+            "currency": "INR",
+            "name": "Pearl Ladies Gallery",
+            "description": "Order Payment",
+
+            "order_id": "{{ razorpay_order_id }}",  
+
+            "handler": function (response){
+                sendPaymentToBackend(response);
+            },
+
+            "prefill": {
+                "name": "{{ order.full_name }}",
+                "email": "{{ order.email }}",
+                "contact": "{{ order.phone }}"
+            },
+
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    }
+
+
+    function sendPaymentToBackend(response){
+
+        fetch(payment_url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrftoken,
+            },
+
+            body: JSON.stringify({
+                orderID: orderID,
+                transID: response.razorpay_payment_id,
+                payment_method: "Razorpay",
+                status: "Success"
+            }),
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            window.location.href = "{% url 'order_complete' %}?order_number=" + data.order_number + "&payment_id=" + data.transID;
+        });
+    }
+
+</script>
+
+
+
+
+  
+{% endblock %}

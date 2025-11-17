@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'category',
     'store',
     'carts',
+    'orders',
 ]
 
 MIDDLEWARE = [
@@ -153,3 +154,6 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS',cast=bool)
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+RAZORPAY_KEY_ID = "rzp_test_Rgp9mSxBtoafx1"
+RAZORPAY_KEY_SECRET = "ksExv2mCOd3NiWu7yOIyoB06"
