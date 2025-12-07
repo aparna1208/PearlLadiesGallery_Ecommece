@@ -1,0 +1,81 @@
+{% extends 'adminpanel/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="main-content">
+    <h2 class="page-title">User Details</h2>
+
+    <div class="user-card">
+
+        <div class="profile-photo">
+            {% if profile.profile_picture %}
+                <img src="{{ profile.profile_picture.url }}" alt="Profile Picture">
+            {% else %}
+                <img src="{% static 'images/default_profile.png' %}" alt="No Picture">
+            {% endif %}
+        </div>
+
+        <div class="user-info">
+            <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Joined:</strong> {{ user.date_joined|date:"Y-m-d" }}</p>
+
+            <hr>
+
+            <h4>Address Details</h4>
+            <p><strong>Address 1:</strong> {{ profile.address_line_1 }}</p>
+            <p><strong>Address 2:</strong> {{ profile.address_line_2 }}</p>
+            <p><strong>Phone Number:</strong> {{ profile.phone_number }}</p>
+            <p><strong>City:</strong> {{ profile.city }}</p>
+            <p><strong>State:</strong> {{ profile.state }}</p>
+            <p><strong>Country:</strong> {{ profile.country }}</p>
+
+            <br>
+            <a href="{% url 'admin_dashboard' %}" class="btn-back">← Back to Dashboard</a>
+        </div>
+
+    </div>
+</div>
+
+<style>
+.page-title {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.user-card {
+    display: flex;
+    gap: 25px;
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.1);
+}
+
+.profile-photo img {
+    width: 150px;
+    height: 150px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 3px solid #eee;
+}
+
+.user-info h3 {
+    margin-bottom: 10px;
+}
+
+.btn-back {
+    padding: 8px 16px;
+    background: #0d6efd;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+}
+
+.btn-back:hover {
+    background: #0b5ed7;
+}
+</style>
+
+{% endblock %}

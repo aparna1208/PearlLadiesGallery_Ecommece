@@ -1,0 +1,41 @@
+{% extends "adminpanel/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="main-content">
+<div class="container mt-1">
+
+    <h2 class="mb-3">Customer Carts</h2>
+
+    <table class="table table-bordered table-striped table-hover shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Cart ID</th>
+                <th>Date Added</th>
+                <th>Total Items</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for cart in carts %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ cart.cart_id }}</td>
+                <td>{{ cart.date_added }}</td>
+                <td>{{ cart.cartitem_set.count }}</td>
+                <td>
+                    <a href="{% url 'cart_items' cart.id %}" class="btn btn-primary btn-sm">
+                        View Items
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+</div>
+</div>
+{% endblock %}

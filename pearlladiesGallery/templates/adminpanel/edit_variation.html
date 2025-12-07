@@ -1,0 +1,51 @@
+{% extends 'adminpanel/base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Edit Variation</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="row">
+
+            <div class="col-md-6 mb-3">
+                <label>Product</label>
+                <select name="product" class="form-control">
+                    {% for p in products %}
+                    <option value="{{ p.id }}" {% if variation.product.id == p.id %}selected{% endif %}>
+                        {{ p.product_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Variation Category</label>
+                <select name="variation_category" class="form-control">
+                    <option value="color" {% if variation.variation_category == "color" %}selected{% endif %}>Color</option>
+                    <option value="size" {% if variation.variation_category == "size" %}selected{% endif %}>Size</option>
+                </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Variation Value</label>
+                <input type="text" name="variation_value" class="form-control" value="{{ variation.variation_value }}">
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Active</label>
+                <select name="is_active" class="form-control">
+                    <option value="True" {% if variation.is_active %}selected{% endif %}>Yes</option>
+                    <option value="False" {% if not variation.is_active %}selected{% endif %}>No</option>
+                </select>
+            </div>
+
+            <div class="col-md-12">
+                <button class="btn btn-primary">Update Variation</button>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+{% endblock %}

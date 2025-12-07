@@ -1,0 +1,58 @@
+{% extends 'adminpanel/base.html' %}
+{% block content %}
+<div class="main-content">
+<div class="container mt-1">
+    <h2>Add Product</h2>
+
+    <form method="POST" enctype="multipart/form-data" class="mt-4">
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Product Name</label>
+                <input type="text" name="product_name" class="form-control" required>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Slug</label>
+                <input type="text" name="slug" class="form-control" required>
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <label>Description</label>
+                <textarea name="description" class="form-control"></textarea>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label>Price</label>
+                <input type="number" name="price" class="form-control" required>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label>Stock</label>
+                <input type="number" name="stock" class="form-control" required>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label>Category</label>
+                <select name="category" class="form-control">
+                    {% for c in categories %}
+                        <option value="{{ c.id }}">{{ c.category_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Main Image</label>
+                <input type="file" name="image" class="form-control" required>
+            </div>
+
+            <div class="col-md-12 mt-3">
+                <button class="btn btn-success">Save Product</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+</div>
+{% endblock %}

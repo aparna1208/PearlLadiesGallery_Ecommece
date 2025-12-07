@@ -1,0 +1,48 @@
+{% extends 'adminpanel/base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Product Reviews</h2>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>User</th>
+                <th>Product</th>
+                <th>Rating</th>
+                <th>Review</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for r in reviews %}
+            <tr>
+                <td>{{ r.user.email }}</td>
+                <td>{{ r.product.product_name }}</td>
+                <td>{{ r.rating }}</td>
+                <td>{{ r.review|truncatewords:10 }}</td>
+                <td>
+                    {% if r.status %}
+                        <span class="badge bg-success">Approved</span>
+                    {% else %}
+                        <span class="badge bg-warning">Pending</span>
+                    {% endif %}
+                </td>
+                <td>{{ r.created_at }}</td>
+
+                <td>
+                    <a href="{% url 'delete_review' r.id %}" class="btn btn-danger btn-sm"
+                        onclick="return confirm('Delete this review?')">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="7" class="text-center">No reviews</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

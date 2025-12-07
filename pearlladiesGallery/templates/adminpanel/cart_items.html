@@ -1,0 +1,70 @@
+{% extends "adminpanel/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="main-content">
+<div class="container mt-1">
+
+    <h2 class="mb-3">Cart Items (Cart ID: {{ cart.cart_id }})</h2>
+
+    <a href="{% url 'cart_list' %}" class="btn btn-secondary mb-3">← Back to Cart List</a>
+
+    <table class="table table-bordered table-hover shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Product</th>
+                <th>Variation</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Sub Total</th>
+                <th>User</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ item.product.product_name }}</td>
+
+                <td>
+                    {% for v in item.variations.all %}
+                    <span class="badge bg-info text-dark">{{ v.variation_category }} : {{ v.variation_value }}</span><br>
+                    {% empty %}
+                    <span class="text-muted">No Variation</span>
+                    {% endfor %}
+                </td>
+
+                <td>{{ item.quantity }}</td>
+
+                <td>₹{{ item.product.price }}</td>
+
+                <td><strong>₹{{ item.sub_total }}</strong></td>
+
+                <td>
+                    {% if item.user %}
+                    {{ item.user.email }}
+                    {% else %}
+                    <span class="text-muted">Guest User</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    <a href="{% url 'delete_cart_item_admin' item.id %}"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Delete this cart item?');">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+</div>
+</div>
+</div>
+{% endblock %}

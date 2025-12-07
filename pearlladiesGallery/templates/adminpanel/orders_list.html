@@ -1,0 +1,53 @@
+{% extends 'adminpanel/base.html' %}
+{% block content %}
+<div class="main-content">
+<div class="container mt-1">
+
+<div class="container">
+    <h2>Orders Dashboard</h2>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Order No</th>
+                <th>Customer</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>City</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>View</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.order_number }}</td>
+                <td>{{ order.full_name }}</td>
+                <td>{{ order.phone }}</td>
+                <td>{{ order.email }}</td>
+                <td>{{ order.city }}</td>
+                <td>₹{{ order.order_total }}</td>
+
+                <td>
+                    <span class="status {{ order.status }}">{{ order.status }}</span>
+                </td>
+
+                <td>{{ order.created_at }}</td>
+
+                <td>
+                    <a href="{% url 'view_order' order.id %}" class="btn btn-sm btn-secondary">View</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+    
+</div>
+
+</div>
+{% endblock %}

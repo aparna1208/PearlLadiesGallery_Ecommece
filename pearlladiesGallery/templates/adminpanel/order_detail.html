@@ -1,0 +1,46 @@
+{% extends 'adminpanel/base.html' %}
+{% block content %}
+<div class="main-content">
+<div class="container mt-1">
+
+<div class="container">
+
+    <h2>Order #{{ order.order_number }}</h2>
+
+    <div class="box">
+        <p><b>Name:</b> {{ order.full_name }}</p>
+        <p><b>Email:</b> {{ order.email }}</p>
+        <p><b>Phone:</b> {{ order.phone }}</p>
+        <p><b>Address:</b> {{ order.full_address }}</p>
+        <p><b>Status:</b> {{ order.status }}</p>
+        <p><b>Total:</b> ₹{{ order.order_total }}</p>
+    </div>
+
+    <h3>Ordered Products</h3>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Total</th>
+        </tr>
+
+        {% for item in products %}
+        <tr>
+            <td>{{ item.product.product_name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>₹{{ item.product_price }}</td>
+            <td>
+                ₹{% widthratio item.quantity 1 item.product_price %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="{% url 'orders_dashboard' %}" class="back">← Back to Orders</a>
+
+</div>
+
+</div>
+</div>
+{% endblock %}

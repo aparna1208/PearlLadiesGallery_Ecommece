@@ -1,0 +1,54 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Login</title>
+
+    <!-- Load Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+</head>
+
+<body>
+
+<section class="section-conten padding-y" style="min-height:84vh">
+
+<div class="card mx-auto" style="max-width: 380px; margin-top:100px;">
+    <div class="card-body">
+
+      <h4 class="card-title mb-4 text-center">Admin Login</h4>
+
+      {% include "includes/alerts.html" %}
+
+      <form action="{% url 'admin_login' %}" method="POST">
+        {% csrf_token %}
+        
+        <div class="form-group mb-3">
+            <input type="email" class="form-control" placeholder="Admin Email" name="email" required>
+        </div>
+
+        <div class="form-group mb-3">
+            <input type="password" class="form-control" placeholder="Password" name="password" required>
+        </div>
+
+        <div class="form-group mb-3">
+            <button type="submit" class="btn btn-primary w-100">
+                Login
+            </button>
+        </div>
+
+      </form>
+    </div>
+</div>
+
+</section>
+
+<!-- Load Bootstrap JS -->
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Optional: jQuery if needed -->
+<script src="{% static 'js/jquery-2.0.0.min.js' %}"></script>
+<script src="{% static 'js/script.js' %}"></script>
+
+</body>
+</html>

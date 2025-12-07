@@ -305,3 +305,6 @@ def order_details(request, order_id):
         'subtotal' : subtotal
     }
     return render(request,'accounts/order_details.html',context)
+
+
+

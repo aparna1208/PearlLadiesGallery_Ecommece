@@ -138,9 +138,7 @@ def place_order(request, total=0, quantity=0):
             # Get order
             order = Order.objects.get(user=current_user, is_ordered=False, order_number=order_number)
 
-            # ============================
             # RAZORPAY ORDER CREATION
-            # ============================
             client = razorpay.Client(
                 auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
             )

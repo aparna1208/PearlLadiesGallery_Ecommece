@@ -1,0 +1,35 @@
+{% extends 'adminpanel/base.html' %}
+{% block content %}
+
+<div class="main-content">
+<div class="container mt-1">
+
+    <h2>Product Gallery - {{ product.product_name }}</h2>
+
+    <form method="POST" enctype="multipart/form-data" class="my-3">
+        {% csrf_token %}
+        <div class="row g-3">
+            <div class="col-md-6">
+                <input type="file" name="image" class="form-control" required>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-primary">Upload</button>
+            </div>
+        </div>
+    </form>
+
+    <hr>
+
+    <div class="row">
+        {% for g in gallery %}
+        <div class="col-md-3 mb-4 text-center">
+            <img src="{{ g.image.url }}" class="img-fluid img-thumbnail mb-2">
+            <a href="{% url 'delete_gallery' g.id %}" class="btn btn-danger btn-sm"
+               onclick="return confirm('Delete image?')">Delete</a>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+</div>
+{% endblock %}
